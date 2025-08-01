@@ -7,6 +7,7 @@ import org.restexpress.Request;
 import org.restexpress.Response;
 import org.restexpress.RestExpress;
 import org.terarkdb.*;
+import org.terarkdb.HdfsEnv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /*
@@ -194,7 +195,13 @@ public class RocksDBConnector {
 
     private static void initializeRocksDb() throws RocksDBException,UnsupportedEncodingException{
             RocksDB.loadLibrary();
+
+            final String hdfsUri = "hdfs://[fdbd:dc03:14:232::139]:65212";
+
+            final HdfsEnv hdfsEnv = new HdfsEnv(hdfsUri);
+            
             Options options = new Options().setCreateIfMissing(true);
+            options.setEnv(hdfsEnv);
             options.setDisableAutoCompactions(true);
             options.setMergeOperatorName("uint64add");
             options.setMaxBackgroundFlushes(1);
@@ -203,7 +210,7 @@ public class RocksDBConnector {
             options.setCreateMissingColumnFamilies(true);
 
             if (db == null) {
-                db = RocksDB.open( options, "/tmp/testdata");
+                db = RocksDB.open( options, hdfsUri + "/wangyi/tmp/testdata");
             }
     }
 }
