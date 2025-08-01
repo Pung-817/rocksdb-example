@@ -196,7 +196,7 @@ public class RocksDBConnector {
     private static void initializeRocksDb() throws RocksDBException,UnsupportedEncodingException{
             RocksDB.loadLibrary();
 
-            final String hdfsUri = "hdfs://[fdbd:dc03:14:232::139]:65212";
+            final String hdfsUri = "hdfs://hostname:port";
 
             final HdfsEnv hdfsEnv = new HdfsEnv(hdfsUri);
             
@@ -210,7 +210,7 @@ public class RocksDBConnector {
             options.setCreateMissingColumnFamilies(true);
 
             if (db == null) {
-                db = RocksDB.open( options, hdfsUri + "/wangyi/tmp/testdata");
+                db = RocksDB.open( options, hdfsUri + "/username/tmp/testdata");
             }
     }
 }
