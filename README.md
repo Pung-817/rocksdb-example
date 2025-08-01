@@ -1,3 +1,1 @@
-# rocksdbSample
-
-[![Build Status](https://travis-ci.org/vishnu667/rocksdbSample.svg?branch=master)](https://travis-ci.org/vishnu667/rocksdbSample)
+# Set up DB Test Suite
