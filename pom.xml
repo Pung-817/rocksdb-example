@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.bytedance</groupId>
       <artifactId>fterarkdbjni</artifactId>
-      <version>5.18.3-bytedance-terark-10.0-20250702-test-SNAPSHOT</version>
+      <version>5.18.3-bytedance-terark-10.0-20250730-test-371-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
