@@ -1,0 +1,18 @@
+#!/bin/bash
+SCRIPT_FILE=$(basename $0)
+COREDUMP_DIR='/opt/tiger/cores'
+if [[ $# < 1 ]]; then
+  echo "Usage: $SCRIPT_FILE [prog]"
+  echo "  Execute: gdb $COREDUMP_DIR/elf.[prog] $COREDUMP_DIR/core.[prog]"
+  # ls -AFhlt $COREDUMP_DIR
+  (cd $COREDUMP_DIR && find . -type f -name "core.*" -print0) | while read -d '' file; do
+    prog=${file#./*.}
+    if [[ -f "$COREDUMP_DIR/elf.$prog" ]]; then
+      echo ''
+      echo "$SCRIPT_FILE $prog"
+      (cd $COREDUMP_DIR && ls -AFhlt core.$prog elf.$prog)
+    fi
+  done
+else
+  gdb "$COREDUMP_DIR/elf.$1" "$COREDUMP_DIR/core.$1"
+fi
