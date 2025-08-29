@@ -50,6 +50,8 @@ public class RocksDBConnector {
     private static long startTime;
     private static long endTime;
 
+    private static Options options_;
+
     private RocksDBConnector() {
     }
 
@@ -124,7 +126,7 @@ public class RocksDBConnector {
         // Test 1: getTablesByCreationTime
         System.out.printf("%n[TEST] Running: getTablesByCreationTime%n");
         System.out.printf("[INFO] Searching for tables between %d and %d%n", startTime, endTime);
-        List<byte[]> tableNames = TBaseTools.getTablesByCreationTime(dbPath, startTime, endTime);
+        List<String> tableNames = TBaseTools.getTablesByCreationTime(dbPath, options_, startTime, endTime);
 
         if (tableNames == null || tableNames.size() < 4) {
             int foundCount = (tableNames == null) ? 0 : tableNames.size();
@@ -135,19 +137,20 @@ public class RocksDBConnector {
 
         System.out.printf("[PASS] getTablesByCreationTime: Found %d tables.%n", tableNames.size());
         for (int i = 0; i < tableNames.size(); i++) {
-            System.out.printf("       - Table %d: %s%n", i + 1, new String(tableNames.get(i)));
+            System.out.printf("       - Table %d: %s%n", i + 1, tableNames.get(i));
         }
 
         // Test 2: getTableIterator
-        byte[] testTableNameBytes = tableNames.get(3);
-        String testTableNameStr = new String(testTableNameBytes);
+        //byte[] testTableNameBytes = tableNames.get(3);
+        //String testTableNameStr = new String(testTableNameBytes);
+        String testTableNameStr = tableNames.get(3);
 
         System.out.printf("%n[TEST] Running: getTableIterator%n");
         System.out.printf("[INFO] Creating iterator for table: %s%n", testTableNameStr);
         TBaseTableIterator iterator = null;
 
         try {
-            iterator = TBaseTools.getTableIterator(testTableNameStr);
+            iterator = TBaseTools.getTableIterator(options_, testTableNameStr);
             //TBaseTools.debugInfo(iterator);
             if (iterator == null) {
                 System.out.println("[FAIL] getTableIterator: Iterator is null.");
@@ -186,18 +189,18 @@ public class RocksDBConnector {
 
         //final String hdfsUri = "hdfs://hostname:port";
         //final HdfsEnv hdfsEnv = new HdfsEnv(hdfsUri);
-        Options options = new Options().setCreateIfMissing(true);
+        options_ = new Options().setCreateIfMissing(true);
         //options.setEnv(hdfsEnv);
-        options.setDisableAutoCompactions(true);
-        options.setMergeOperatorName("uint64add");
-        options.setMaxBackgroundFlushes(1);
-        options.setWriteBufferSize(50L);
-        options.setBlobSize(256);
-        options.setCreateMissingColumnFamilies(true);
+        options_.setDisableAutoCompactions(true);
+        options_.setMergeOperatorName("uint64add");
+        options_.setMaxBackgroundFlushes(1);
+        options_.setWriteBufferSize(50L);
+        options_.setBlobSize(256);
+        options_.setCreateMissingColumnFamilies(true);
 
         if (db == null) {
             //db = RocksDB.open( options, hdfsUri + "/username/tmp/testdata");
-            db = RocksDB.open(options, "/tmp/testdata");
+            db = RocksDB.open(options_, "/tmp/testdata");
         }
     }
 }
